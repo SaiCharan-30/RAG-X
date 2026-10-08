@@ -66,3 +66,4 @@ data/processed/
 # Jupyter
 # ================================
 .ipynb_checkpoints/
+data/uploads/

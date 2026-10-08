@@ -1,0 +1,3 @@
+RAG-X final deletion test document.
+
+This document is used to verify that document deletion removes the original file, PostgreSQL metadata, PostgreSQL chunks, and Qdrant vectors.

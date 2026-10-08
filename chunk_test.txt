@@ -1,0 +1,47 @@
+RAG-X is an advanced multi-document AI knowledge assistant.
+
+The system allows users to upload multiple documents and ask questions about them.
+
+Documents are stored securely and processed through an ingestion pipeline.
+
+The ingestion pipeline extracts text from PDF, DOCX, TXT, and HTML documents.
+
+After extraction, the text is cleaned and divided into meaningful chunks.
+
+Each chunk contains metadata such as document ID, filename, page number, section, and chunk index.
+
+The chunks are converted into vector embeddings.
+
+The embeddings are stored in a vector database.
+
+When a user asks a question, the system retrieves relevant chunks from the document collection.
+
+The retrieval system can combine semantic search with keyword-based search.
+
+A reranking model then evaluates the retrieved candidates.
+
+The highest quality chunks are passed to the language model.
+
+The language model generates an answer using the retrieved context.
+
+The system also provides citations so that users can identify the source of the answer.
+
+If sufficient evidence cannot be found, the system should avoid hallucinating an answer.
+
+RAG-X also supports conversational questions.
+
+For example, a user might first ask about a proposed architecture and then ask about its advantages.
+
+The system should understand that its refers to the architecture mentioned in the previous conversation.
+
+The application uses FastAPI for the backend and Streamlit for the frontend.
+
+PostgreSQL stores application metadata while Qdrant stores vector representations.
+
+LangChain manages important RAG components and LangGraph manages the stateful workflow.
+
+Evaluation metrics are used to measure retrieval quality and answer quality.
+
+The system also records user feedback to improve future versions.
+
+This architecture is designed to be modular, testable, and production oriented.
