@@ -70,80 +70,81 @@ class GeminiService:
         if "answer:" in prompt_lower:
             return "The architecture is designed to be modular, testable, and production-oriented [1]."
 
-            if "document summarization assistant" in prompt_lower:
+        # Document summaries
+        if "document summarization assistant" in prompt_lower:
 
-                # Quick summary
-                if "3 to 5 sentences" in prompt_lower:
-                    return (
-                        "RAG-X is a multi-document AI knowledge assistant "
-                        "for uploading documents and asking questions across "
-                        "a knowledge base."
-                    )
-
-                # Reduce stage: combine multiple partial summaries
-                if "partial summaries" in prompt_lower:
-                    return (
-                        "RAG-X is a multi-document AI knowledge assistant "
-                        "that processes documents into chunks, uses hybrid "
-                        "retrieval and reranking to find relevant evidence, "
-                        "and generates grounded answers with citations."
-                    )
-
-                # Map stage: summarize one chunk group
-                if "document section" in prompt_lower:
-                    return (
-                        "Partial summary: The section describes document "
-                        "processing, chunking, retrieval, and grounded "
-                        "generation in the RAG-X system."
-                    )
-
-            if "detailed summary" in prompt_lower:
+            # Quick summary
+            if "3 to 5 sentences" in prompt_lower:
                 return (
-                    "RAG-X processes uploaded documents, extracts and "
-                    "chunks their text, generates dense and sparse embeddings, "
-                    "and stores vectors in Qdrant. PostgreSQL stores application "
-                    "metadata, while hybrid retrieval and reranking improve "
-                    "evidence selection. LangGraph organizes the workflow, "
-                    "and grounding and citations help produce supported answers."
+                    "RAG-X is a multi-document AI knowledge assistant "
+                    "for uploading documents and asking questions across "
+                    "a knowledge base."
                 )
 
-            if "bullet-point list" in prompt_lower:
+            # Reduce stage: combine multiple partial summaries
+            if "partial summaries" in prompt_lower:
                 return (
-                    "- Multi-document upload and processing\n"
-                    "- Dense and sparse hybrid retrieval\n"
-                    "- Reranking for relevant evidence\n"
-                    "- Grounded answers with citations\n"
-                    "- LangGraph-based RAG workflow"
+                    "RAG-X is a multi-document AI knowledge assistant "
+                    "that processes documents into chunks, uses hybrid "
+                    "retrieval and reranking to find relevant evidence, "
+                    "and generates grounded answers with citations."
                 )
 
-            if "methodology" in prompt_lower:
+            # Map stage: summarize one chunk group
+            if "document section" in prompt_lower:
                 return (
-                    "The system processes documents into chunks, generates "
-                    "dense and sparse embeddings, retrieves relevant evidence "
-                    "using hybrid search, reranks the candidates, and uses an "
-                    "LLM to generate grounded responses."
+                    "Partial summary: The section describes document "
+                    "processing, chunking, retrieval, and grounded "
+                    "generation in the RAG-X system."
                 )
 
-            if "main findings" in prompt_lower:
-                return (
-                    "The document describes a modular RAG architecture that "
-                    "combines document processing, hybrid retrieval, reranking, "
-                    "grounded generation, citations, and evaluation."
-                )
+        if "detailed summary" in prompt_lower:
+            return (
+                "RAG-X processes uploaded documents, extracts and "
+                "chunks their text, generates dense and sparse embeddings, "
+                "and stores vectors in Qdrant. PostgreSQL stores application "
+                "metadata, while hybrid retrieval and reranking improve "
+                "evidence selection. LangGraph organizes the workflow, "
+                "and grounding and citations help produce supported answers."
+            )
 
-            if "limitations" in prompt_lower:
-                return (
-                    "The document does not describe specific limitations."
-                )
+        if "bullet-point list" in prompt_lower:
+            return (
+                "- Multi-document upload and processing\n"
+                "- Dense and sparse hybrid retrieval\n"
+                "- Reranking for relevant evidence\n"
+                "- Grounded answers with citations\n"
+                "- LangGraph-based RAG workflow"
+            )
 
-            if "comma-separated list" in prompt_lower:
-                return (
-                    "RAG, multi-document retrieval, embeddings, Qdrant, "
-                    "PostgreSQL, hybrid search, reranking, LangGraph, "
-                    "grounding, citations"
-                )
+        if "methodology" in prompt_lower:
+            return (
+                "The system processes documents into chunks, generates "
+                "dense and sparse embeddings, retrieves relevant evidence "
+                "using hybrid search, reranks the candidates, and uses an "
+                "LLM to generate grounded responses."
+            )
+
+        if "main findings" in prompt_lower:
+            return (
+                "The document describes a modular RAG architecture that "
+                "combines document processing, hybrid retrieval, reranking, "
+                "grounded generation, citations, and evaluation."
+            )
+
+        if "limitations" in prompt_lower:
+            return (
+                "The document does not describe specific limitations."
+            )
+
+        if "comma-separated list" in prompt_lower:
+            return (
+                "RAG, multi-document retrieval, embeddings, Qdrant, "
+                "PostgreSQL, hybrid search, reranking, LangGraph, "
+                "grounding, citations"
+            )
+
         return "Mock Gemini response."
-        
 
 
 gemini_service = GeminiService()
