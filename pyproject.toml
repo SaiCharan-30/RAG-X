@@ -36,4 +36,5 @@ torch = { index = "pytorch-cpu" }
 [tool.uv]
 environments = [
     "sys_platform == 'linux'",
+    "sys_platform == 'win32'",
 ]
