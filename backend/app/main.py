@@ -1,4 +1,4 @@
-import logging
+﻿import logging
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -7,6 +7,7 @@ from backend.app.api.routes import chat, documents, health
 from backend.app.core.config import settings
 from backend.app.core.logging import setup_logging
 from backend.app.database.init_db import init_db
+from backend.app.services.vector_store import vector_store
 
 setup_logging()
 
@@ -19,6 +20,10 @@ async def lifespan(app: FastAPI):
     # Creates any missing PostgreSQL tables (existing tables and data are untouched).
     init_db()
     logger.info("Database tables are ready.")
+
+    # Creates the Qdrant collection if it does not exist yet (safe to repeat).
+    vector_store.create_collection()
+    logger.info("Qdrant collection is ready.")
     yield
 
 
