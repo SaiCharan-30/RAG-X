@@ -1,11 +1,10 @@
-from backend.app.rag.graph.state import RAGState
+﻿from backend.app.rag.graph.state import RAGState
 from backend.app.services.query_rewriter import rewrite_query
 from backend.app.services.search import hybrid_search
 from backend.app.services.reranker import reranker
 from backend.app.services.context_evaluator import evaluate_context
 from backend.app.services.answer_generator import generate_answer
 from backend.app.services.grounding_checker import check_grounding
-from backend.app.services.citation_generator import generate_citations
 from backend.app.services.citation_generator import generate_citations
 def rewrite_query_node(state: RAGState) -> dict:
     rewritten_query = rewrite_query(
