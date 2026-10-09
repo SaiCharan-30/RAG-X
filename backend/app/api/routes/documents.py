@@ -3,6 +3,7 @@ from pathlib import Path
 from uuid import uuid4
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from fastapi.concurrency import run_in_threadpool
 from sqlalchemy.orm import Session
 
 from backend.app.database.connection import get_db
@@ -13,6 +14,7 @@ from backend.app.schemas.document import DocumentListItem
 from backend.app.models.chunk import DocumentChunk
 from backend.app.services.vector_store import vector_store
 from backend.app.services.document_intelligence import summarize_document
+from backend.app.services.indexing import index_uploaded_document
 from backend.app.schemas.document import (
     DocumentDeleteResponse,
     DocumentListItem,
@@ -138,16 +140,35 @@ async def upload_document(
         )
 
     # -----------------------------------------
-    # 12. Return API response
+    # 12. Index the document (parse -> chunk -> embed -> store).
+    #     Runs in a worker thread so the server stays responsive
+    #     while the AI models are working.
+    # -----------------------------------------
+    chunks_indexed, index_error = await run_in_threadpool(
+        index_uploaded_document,
+        document,
+        db,
+    )
+
+    if index_error is None:
+        message = "Document uploaded and indexed successfully."
+    else:
+        message = "Document uploaded, but indexing failed."
+
+    # -----------------------------------------
+    # 13. Return API response
     # -----------------------------------------
     return DocumentUploadResponse(
-        message="Document uploaded successfully.",
+        message=message,
         document_id=document_id,
         original_filename=safe_filename,
         stored_filename=stored_filename,
         file_type=extension,
         size_bytes=len(contents),
         uploaded_at=uploaded_at,
+        status=document.status,
+        chunks_indexed=chunks_indexed,
+        error=index_error,
     )
 
 

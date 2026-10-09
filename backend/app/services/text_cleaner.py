@@ -6,6 +6,10 @@ def clean_text(text: str) -> str:
     Clean extracted document text while preserving meaningful content.
     """
 
+    # Remove NUL characters (PostgreSQL cannot store them; they appear in
+    # UTF-16 text files and some PDFs)
+    text = text.replace("\x00", "")
+
     # Normalize line endings
     text = text.replace("\r\n", "\n")
     text = text.replace("\r", "\n")

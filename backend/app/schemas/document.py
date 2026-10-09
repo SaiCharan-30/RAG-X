@@ -12,6 +12,9 @@ class DocumentUploadResponse(BaseModel):
     file_type: str
     size_bytes: int
     uploaded_at: datetime
+    status: str
+    chunks_indexed: int = 0
+    error: str | None = None
 
 
 class DocumentListItem(BaseModel):
