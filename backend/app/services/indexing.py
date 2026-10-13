@@ -158,7 +158,18 @@ def index_uploaded_document(
 
         _remove_partial_index(document_id, db)
 
-        error_message = (str(exc).strip() or type(exc).__name__)[:300]
+        logger.exception("Indexing failed for document %s", document_id)
+
+        # Our own ValueError messages are written for users (for example
+        # "No readable text..."). Anything else may contain file paths or
+        # library internals, so show a generic message instead.
+        if isinstance(exc, ValueError) and str(exc).strip():
+            error_message = str(exc).strip()[:300]
+        else:
+            error_message = (
+                "Could not read this file. It may be corrupted "
+                "or in an unsupported format."
+            )
 
         try:
             document.status = "failed"

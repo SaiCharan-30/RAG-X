@@ -1,8 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
+from backend.app.api.validators import ensure_documents_ready
 from backend.app.database.connection import get_db
-from backend.app.models.document import Document
 from backend.app.schemas.search import (
     SearchRequest,
     SearchResponse,
@@ -25,37 +25,7 @@ def search_endpoint(
     # worker thread and the server stays responsive while the AI models work.
 
     # 1. Check the chosen documents (single / selected mode)
-    if request.document_ids:
-        statuses = {
-            document.document_id: document.status
-            for document in db.query(Document)
-            .filter(Document.document_id.in_(request.document_ids))
-            .all()
-        }
-
-        unknown = [
-            document_id
-            for document_id in request.document_ids
-            if document_id not in statuses
-        ]
-
-        if unknown:
-            raise HTTPException(
-                status_code=404,
-                detail=f"Document(s) not found: {', '.join(unknown)}",
-            )
-
-        not_ready = [
-            f"{document_id} (status: {statuses[document_id]})"
-            for document_id in request.document_ids
-            if statuses[document_id] != "indexed"
-        ]
-
-        if not_ready:
-            raise HTTPException(
-                status_code=400,
-                detail=f"Document(s) not indexed yet: {', '.join(not_ready)}",
-            )
+    ensure_documents_ready(db, request.document_ids)
 
     # 2. Retrieve (and optionally rerank)
     found = search_documents(

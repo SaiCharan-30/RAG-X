@@ -1,3 +1,5 @@
+import logging
+
 from sqlalchemy.orm import Session
 
 from backend.app.rag.graph.workflow import rag_graph
@@ -5,6 +7,9 @@ from backend.app.services.conversation_service import (
     add_message,
     get_conversation_history,
 )
+from backend.app.services.errors import AIServiceError
+
+logger = logging.getLogger(__name__)
 
 
 def ask_question(
@@ -17,14 +22,6 @@ def ask_question(
     conversation_history = get_conversation_history(
         db=db,
         conversation_id=conversation_id,
-    )
-
-    # Save the new user message.
-    add_message(
-        db=db,
-        conversation_id=conversation_id,
-        role="user",
-        content=query,
     )
 
     # Run the RAG workflow.
@@ -45,9 +42,35 @@ def ask_question(
         "retry_count": 0,
     }
 
-    result = rag_graph.invoke(state)
+    try:
+        result = rag_graph.invoke(state)
 
-    # Save the assistant response together with its citations.
+    except Exception as exc:
+        # Full technical details go to the server log only.
+        logger.exception("RAG workflow failed")
+
+        error_text = str(exc)
+
+        if "429" in error_text or "RESOURCE_EXHAUSTED" in error_text:
+            raise AIServiceError(
+                "The AI service has reached its usage limit. "
+                "Please try again later."
+            ) from exc
+
+        raise AIServiceError(
+            "The question could not be answered because an AI service "
+            "failed. Please try again."
+        ) from exc
+
+    # Save both messages only after the answer succeeded, so a failed
+    # question does not leave a half-finished conversation behind.
+    add_message(
+        db=db,
+        conversation_id=conversation_id,
+        role="user",
+        content=query,
+    )
+
     add_message(
         db=db,
         conversation_id=conversation_id,

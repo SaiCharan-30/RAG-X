@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseModel, Field, model_validator
 
 from backend.app.schemas.document_mode import DocumentMode
@@ -55,11 +57,11 @@ class CitationResponse(BaseModel):
     citation_id: int
     document_id: str | None = None
     chunk_id: str | None = None
-    snippet: str | None = None
     filename: str | None = None
     page_number: int | None = None
     section: str | None = None
     chunk_index: int | None = None
+    snippet: str | None = None
 
 
 class ChatResponse(BaseModel):
@@ -71,3 +73,30 @@ class ChatResponse(BaseModel):
     grounding_score: float
     context_quality: float
     citations: list[CitationResponse]
+
+
+class ConversationSummary(BaseModel):
+    conversation_id: str
+    title: str
+    message_count: int
+    created_at: datetime
+    updated_at: datetime
+
+
+class MessageResponse(BaseModel):
+    message_id: str
+    role: str
+    content: str
+    citations: list[CitationResponse] | None = None
+    created_at: datetime
+
+
+class ConversationMessagesResponse(BaseModel):
+    conversation_id: str
+    title: str
+    messages: list[MessageResponse]
+
+
+class DeleteConversationResponse(BaseModel):
+    message: str
+    conversation_id: str

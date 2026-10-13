@@ -1,6 +1,7 @@
 from datetime import datetime, timezone
 from uuid import uuid4
 
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from backend.app.models.conversation import Conversation
@@ -25,6 +26,37 @@ def create_conversation(
     db.refresh(conversation)
 
     return conversation
+
+
+def get_conversation(
+    db: Session,
+    conversation_id: str,
+) -> Conversation | None:
+    return (
+        db.query(Conversation)
+        .filter(
+            Conversation.conversation_id == conversation_id
+        )
+        .first()
+    )
+
+
+def list_conversations(
+    db: Session,
+) -> list[tuple[Conversation, int]]:
+    """
+    Every conversation with its message count, most recently active first.
+    """
+    return (
+        db.query(Conversation, func.count(Message.id))
+        .outerjoin(
+            Message,
+            Message.conversation_id == Conversation.conversation_id,
+        )
+        .group_by(Conversation.id)
+        .order_by(Conversation.updated_at.desc())
+        .all()
+    )
 
 
 def add_message(

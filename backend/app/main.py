@@ -1,14 +1,14 @@
-﻿import logging
+import logging
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 
-from backend.app.api.routes import chat, documents, health
+from backend.app.api.routes import chat, documents, health, search
 from backend.app.core.config import settings
 from backend.app.core.logging import setup_logging
 from backend.app.database.init_db import init_db
 from backend.app.services.vector_store import vector_store
-from backend.app.api.routes import chat, documents, health, search
 
 setup_logging()
 
@@ -36,6 +36,18 @@ app = FastAPI(
 )
 
 
+@app.exception_handler(Exception)
+async def unhandled_exception_handler(request: Request, exc: Exception):
+    # Anything we did not expect: log the details for the developer,
+    # but show the user a short, safe message in the usual JSON shape.
+    logger.exception("Unhandled error on %s %s", request.method, request.url.path)
+
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Something went wrong on the server. Please try again."},
+    )
+
+
 app.include_router(
     health.router,
     prefix="/health",
@@ -54,12 +66,12 @@ app.include_router(
     tags=["Chat"],
 )
 
-
 app.include_router(
     search.router,
     prefix="/search",
     tags=["Search"],
 )
+
 
 @app.get("/")
 def root():
