@@ -8,6 +8,7 @@ from backend.app.core.config import settings
 from backend.app.core.logging import setup_logging
 from backend.app.database.init_db import init_db
 from backend.app.services.vector_store import vector_store
+from backend.app.api.routes import chat, documents, health, search
 
 setup_logging()
 
@@ -53,6 +54,12 @@ app.include_router(
     tags=["Chat"],
 )
 
+
+app.include_router(
+    search.router,
+    prefix="/search",
+    tags=["Search"],
+)
 
 @app.get("/")
 def root():

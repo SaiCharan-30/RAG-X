@@ -128,3 +128,33 @@ def conversational_search(
         result["rewritten_query"] = rewritten_query
 
     return results
+
+def search_documents(
+    query: str,
+    document_ids: list[str] | None = None,
+    top_k: int = 5,
+    use_reranker: bool = True,
+    candidate_limit: int = 20,
+) -> list[dict]:
+    """
+    Retrieval used by the /search endpoint: hybrid search, then (optionally)
+    reranking. Every result remembers its position before reranking
+    ("retrieval_rank") so you can see what the reranker changed.
+    """
+    candidates = hybrid_search(
+        query=query,
+        limit=max(candidate_limit, top_k),
+        document_ids=document_ids,
+    )
+
+    for position, candidate in enumerate(candidates, start=1):
+        candidate["retrieval_rank"] = position
+
+    if use_reranker:
+        return reranker.rerank(
+            query=query,
+            results=candidates,
+            top_k=top_k,
+        )
+
+    return candidates[:top_k]
