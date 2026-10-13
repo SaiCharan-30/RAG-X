@@ -1,57 +1,28 @@
-from backend.app.services.gemini_service import gemini_service
+# The reranker already scores every chunk from 0 to 1 for the question,
+# so we reuse it as the "is the context good enough?" signal.
+# This replaces a Gemini call, so it is free, instant and repeatable.
+
+# Below this best score, the documents almost certainly do not contain
+# the answer (in testing, unrelated chunks scored around 0.0001 - 0.02,
+# real matches scored 0.5 - 1.0). Tune this number in the evaluation phase.
+MIN_CONTEXT_SCORE = 0.05
 
 
 def evaluate_context(
     query: str,
     results: list[dict],
 ) -> float:
-    if not results:
-        print("DEBUG: No retrieval results.")
-        return 0.0
-
-    context = "\n\n".join(
-        result["text"]
+    """
+    Returns the best rerank score (0 to 1) among the retrieved chunks,
+    or 0.0 when nothing was retrieved.
+    """
+    scores = [
+        result["rerank_score"]
         for result in results
-    )
+        if result.get("rerank_score") is not None
+    ]
 
-    prompt = f"""
-You are evaluating retrieval quality for a
-Retrieval-Augmented Generation system.
-
-User query:
-{query}
-
-Retrieved context:
-{context}
-
-Rate how well the retrieved context can answer the query.
-
-Return ONLY a decimal number between 0 and 1.
-
-Examples:
-0
-0.25
-0.5
-0.75
-1
-
-Do not return words.
-Do not return Markdown.
-Do not explain your answer.
-"""
-
-    response = gemini_service.generate(prompt)
-
-    print("DEBUG - Raw Gemini response:", repr(response))
-
-    try:
-        score = float(response.strip())
-    except ValueError:
-        print("DEBUG - Could not convert response to float.")
+    if not scores:
         return 0.0
 
-    score = max(0.0, min(score, 1.0))
-
-    print("DEBUG - Parsed context score:", score)
-
-    return score
+    return max(0.0, min(max(scores), 1.0))

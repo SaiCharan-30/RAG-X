@@ -49,7 +49,10 @@ class GeminiService:
 
         # Query rewriting
         if "standalone search query" in prompt_lower:
-            return "What are the advantages of the RAG-X architecture?"
+            # Mock: return the latest user question unchanged.
+            start = prompt.rfind("Latest user question:")
+            end = prompt.rfind("Standalone search query:")
+            return prompt[start + len("Latest user question:"):end].strip()
 
         # Citation validation
         if "supported source numbers" in prompt_lower:

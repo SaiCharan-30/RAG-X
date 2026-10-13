@@ -7,6 +7,11 @@ def rewrite_query(
 ) -> str:
     conversation_history = conversation_history or []
 
+    # First question of a conversation: nothing to resolve, so skip the
+    # Gemini call completely.
+    if not conversation_history:
+        return query
+
     history_text = "\n".join(
         f"{message['role']}: {message['content']}"
         for message in conversation_history
@@ -37,6 +42,7 @@ Latest user question:
 Standalone search query:
 """
 
-    rewritten_query = gemini_service.generate(prompt)
+    rewritten_query = gemini_service.generate(prompt).strip()
 
-    return rewritten_query.strip()
+    # If the model returns nothing useful, search with the original question.
+    return rewritten_query or query
