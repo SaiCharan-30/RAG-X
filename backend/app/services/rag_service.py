@@ -23,10 +23,10 @@ def ask_question(
     add_message(
         db=db,
         conversation_id=conversation_id,
-        role="assistant",
-        content=result["answer"],
-        citations=result["citations"],
+        role="user",
+        content=query,
     )
+
     # Run the RAG workflow.
     state = {
         "original_query": query,
@@ -47,12 +47,13 @@ def ask_question(
 
     result = rag_graph.invoke(state)
 
-    # Save the assistant response.
+    # Save the assistant response together with its citations.
     add_message(
         db=db,
         conversation_id=conversation_id,
         role="assistant",
         content=result["answer"],
+        citations=result["citations"],
     )
 
     return result

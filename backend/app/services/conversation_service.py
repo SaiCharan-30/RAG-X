@@ -32,6 +32,7 @@ def add_message(
     conversation_id: str,
     role: str,
     content: str,
+    citations: list[dict] | None = None,
 ) -> Message:
     conversation = (
         db.query(Conversation)
