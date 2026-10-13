@@ -55,6 +55,7 @@ class CitationResponse(BaseModel):
     citation_id: int
     document_id: str | None = None
     chunk_id: str | None = None
+    snippet: str | None = None
     filename: str | None = None
     page_number: int | None = None
     section: str | None = None

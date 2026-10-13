@@ -1,6 +1,6 @@
 from datetime import datetime
+from sqlalchemy import JSON, DateTime, ForeignKey, String, Text
 
-from sqlalchemy import DateTime, ForeignKey, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from backend.app.database.base import Base
@@ -37,6 +37,13 @@ class Message(Base):
         Text,
         nullable=False,
     )
+
+        # Sources shown with an assistant answer (None for user messages).
+    citations: Mapped[list | None] = mapped_column(
+        JSON,
+        nullable=True,
+    )
+
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),

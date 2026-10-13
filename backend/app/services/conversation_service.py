@@ -51,6 +51,7 @@ def add_message(
         conversation_id=conversation_id,
         role=role,
         content=content,
+        citations=citations,
         created_at=datetime.now(timezone.utc),
     )
 

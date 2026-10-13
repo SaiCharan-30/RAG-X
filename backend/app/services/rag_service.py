@@ -23,10 +23,10 @@ def ask_question(
     add_message(
         db=db,
         conversation_id=conversation_id,
-        role="user",
-        content=query,
+        role="assistant",
+        content=result["answer"],
+        citations=result["citations"],
     )
-
     # Run the RAG workflow.
     state = {
         "original_query": query,
