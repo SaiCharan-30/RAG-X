@@ -1,5 +1,8 @@
 import streamlit as st
 
+from utils.api_client import ApiError
+from utils.components import load_overview
+
 
 st.set_page_config(
     page_title="RAG-X",
@@ -20,16 +23,22 @@ st.write(
 st.divider()
 
 
-col1, col2, col3 = st.columns(3)
+try:
+    overview = load_overview()
 
-with col1:
-    st.metric("Documents", "0")
+    col1, col2, col3 = st.columns(3)
 
-with col2:
-    st.metric("Conversations", "0")
+    with col1:
+        st.metric("Indexed documents", overview["indexed"])
 
-with col3:
-    st.metric("Questions Asked", "0")
+    with col2:
+        st.metric("Conversations", len(overview["conversations"]))
+
+    with col3:
+        st.metric("Questions asked", overview["questions"])
+
+except ApiError as error:
+    st.error(str(error))
 
 
 st.divider()
@@ -48,6 +57,6 @@ st.write(
 
     **Evaluation** → Evaluate RAG performance.
 
-    **Settings** → Configure application settings.
+    **Settings** → See how the app is configured.
     """
 )
