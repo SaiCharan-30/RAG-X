@@ -7,8 +7,10 @@ from backend.app.services.context_evaluator import (
 )
 from backend.app.services.grounding_checker import check_grounding
 from backend.app.services.query_rewriter import rewrite_query
-from backend.app.services.reranker import reranker
-from backend.app.services.search import hybrid_search
+from backend.app.services.search import (
+    hybrid_search,
+    rerank_keep_search_order,
+)
 
 NOT_FOUND_ANSWER = (
     "I could not find relevant information "
@@ -40,9 +42,10 @@ def retrieve_node(state: RAGState) -> dict:
 
 
 def rerank_node(state: RAGState) -> dict:
-    results = reranker.rerank(
+    # Passages stay in hybrid-search order; each keeps its rerank_score.
+    results = rerank_keep_search_order(
         query=state["rewritten_query"],
-        results=state["retrieved_chunks"],
+        candidates=state["retrieved_chunks"],
         top_k=5,
     )
 
@@ -82,10 +85,11 @@ def retry_retrieval_node(state: RAGState) -> dict:
         document_ids=state["document_ids"],
     )
 
-    reranked = reranker.rerank(
+    # "Look wider": keep the top 10 passages instead of the top 5.
+    reranked = rerank_keep_search_order(
         query=state["rewritten_query"],
-        results=results,
-        top_k=5,
+        candidates=results,
+        top_k=10,
     )
 
     return {

@@ -1,0 +1,318 @@
+{
+  "_help": "in_scope: questions your documents CAN answer. 'file' is part of the file name; 'keywords' are words or phrases that must appear in a passage that answers the question (any one is enough). out_of_scope: questions your documents can NOT answer - the assistant should say it could not find an answer.",
+  "in_scope": [
+    {
+      "id": "paper-trial-solution",
+      "question": "How is the trial solution of the differential equation constructed?",
+      "file": "Artificial_neural_networks",
+      "keywords": [
+        "sum of two parts",
+        "no adjustable parameters",
+        "satisfies the initial/boundary"
+      ]
+    },
+    {
+      "id": "paper-network-architecture",
+      "question": "What kind of neural network does the method use?",
+      "file": "Artificial_neural_networks",
+      "keywords": [
+        "multilayer perceptron",
+        "one hidden layer",
+        "sigmoid"
+      ]
+    },
+    {
+      "id": "paper-optimizer",
+      "question": "Which optimization algorithm is used to train the network?",
+      "file": "Artificial_neural_networks",
+      "keywords": [
+        "bfgs",
+        "quasi-newton",
+        "merlin"
+      ]
+    },
+    {
+      "id": "paper-collocation",
+      "question": "What is the collocation method and how is the domain discretized?",
+      "file": "Artificial_neural_networks",
+      "keywords": [
+        "collocation",
+        "discretization of the domain"
+      ]
+    },
+    {
+      "id": "paper-mixed-bc",
+      "question": "How are boundary conditions that are Dirichlet on one part of the boundary and Neumann elsewhere handled?",
+      "file": "Artificial_neural_networks",
+      "keywords": [
+        "dirichlet on part of the boundary",
+        "neumann elsewhere",
+        "neumann"
+      ]
+    },
+    {
+      "id": "paper-first-order-ode",
+      "question": "What is the form of the trial solution for a first-order ODE with an initial condition?",
+      "file": "Artificial_neural_networks",
+      "keywords": [
+        "satisfies the ic by construction",
+        "ic by construction",
+        "a + xn"
+      ]
+    },
+    {
+      "id": "paper-fem-accuracy",
+      "question": "How does the accuracy between training points compare with the finite element method?",
+      "file": "Artificial_neural_networks",
+      "keywords": [
+        "interpolation points",
+        "orders of magnitude",
+        "finite element"
+      ]
+    },
+    {
+      "id": "paper-fem-memory",
+      "question": "What memory problem can the finite element method run into?",
+      "file": "Artificial_neural_networks",
+      "keywords": [
+        "memory requirements",
+        "memory resources"
+      ]
+    },
+    {
+      "id": "paper-ode-grid",
+      "question": "How many equidistant training points were used in the one-dimensional ODE example?",
+      "file": "Artificial_neural_networks",
+      "keywords": [
+        "ten equidistant points",
+        "grid of ten equidistant"
+      ]
+    },
+    {
+      "id": "paper-conclusions",
+      "question": "What advantages do the authors state in their conclusions?",
+      "file": "Artificial_neural_networks",
+      "keywords": [
+        "unconstrained",
+        "general and can be applied",
+        "both odes and pdes"
+      ]
+    },
+    {
+      "id": "report-qdrant",
+      "question": "What does Qdrant store?",
+      "file": "report.pdf",
+      "keywords": [
+        "qdrant stores vectors"
+      ]
+    },
+    {
+      "id": "memo-citations",
+      "question": "What does the Word memo say about citations?",
+      "file": "memo.docx",
+      "keywords": [
+        "citations and grounding"
+      ]
+    },
+    {
+      "id": "page-embeddings",
+      "question": "What topics does the HTML page cover?",
+      "file": "page.html",
+      "keywords": [
+        "embeddings and chunking"
+      ]
+    },
+    {
+      "id": "utf16-rag",
+      "question": "Which note is about retrieval augmented generation?",
+      "file": "utf16.txt",
+      "keywords": [
+        "retrieval augmented generation"
+      ]
+    },
+    {
+      "id": "paper-bfgs",
+      "question": "Which optimization algorithm is used to train the network?",
+      "file": "Artificial_neural_networks",
+      "keywords": [
+        "bfgs",
+        "quasi-newton"
+      ]
+    },
+    {
+      "id": "paper-derivatives",
+      "question": "How are the derivatives of the network output obtained?",
+      "file": "Artificial_neural_networks",
+      "keywords": [
+        "derivative of the network",
+        "with respect to its inputs",
+        "with respect to the inputs",
+        "backpropagation"
+      ]
+    },
+    {
+      "id": "paper-bc-types",
+      "question": "Which kinds of boundary conditions does the method handle?",
+      "file": "Artificial_neural_networks",
+      "keywords": [
+        "dirichlet",
+        "neumann"
+      ]
+    },
+    {
+      "id": "paper-irregular",
+      "question": "What future work is mentioned about the shape of the boundary?",
+      "file": "Artificial_neural_networks",
+      "keywords": [
+        "irregular",
+        "arbitrarily shaped"
+      ]
+    },
+    {
+      "id": "paper-closed-form",
+      "question": "In what form is the final solution obtained?",
+      "file": "Artificial_neural_networks",
+      "keywords": [
+        "closed analytic form",
+        "differentiable"
+      ]
+    },
+    {
+      "id": "paper-interpolation",
+      "question": "How accurate is the solution at points between the training points?",
+      "file": "Artificial_neural_networks",
+      "keywords": [
+        "interpolation",
+        "test points"
+      ]
+    },
+    {
+      "id": "paper-parallel",
+      "question": "Can the method take advantage of parallel or neural hardware?",
+      "file": "Artificial_neural_networks",
+      "keywords": [
+        "parallel",
+        "hardware"
+      ]
+    },
+    {
+      "id": "paper-param-scaling",
+      "question": "How does the number of parameters needed compare with the finite element method?",
+      "file": "Artificial_neural_networks",
+      "keywords": [
+        "number of parameters",
+        "number of elements"
+      ]
+    },
+    {
+      "id": "paper-coupled",
+      "question": "Does the paper solve systems of coupled ODEs?",
+      "file": "Artificial_neural_networks",
+      "keywords": [
+        "coupled"
+      ]
+    },
+    {
+      "id": "paper-second-order",
+      "question": "Does the method work for second order ODEs?",
+      "file": "Artificial_neural_networks",
+      "keywords": [
+        "second-order",
+        "second order"
+      ]
+    },
+    {
+      "id": "paper-nonlinear",
+      "question": "Can the method handle nonlinear differential equations?",
+      "file": "Artificial_neural_networks",
+      "keywords": [
+        "nonlinear",
+        "non-linear"
+      ]
+    },
+    {
+      "id": "paper-fem-compare",
+      "question": "How does the neural method compare with the finite element method in accuracy?",
+      "file": "Artificial_neural_networks",
+      "keywords": [
+        "comparison",
+        "compare"
+      ]
+    },
+    {
+      "id": "paper-hidden-units",
+      "question": "How many hidden units does the network have?",
+      "file": "Artificial_neural_networks",
+      "keywords": [
+        "hidden units",
+        "hidden layer"
+      ]
+    },
+    {
+      "id": "memo-langgraph",
+      "question": "What workflow tool does the Word memo talk about?",
+      "file": "memo.docx",
+      "keywords": [
+        "langgraph"
+      ]
+    },
+    {
+      "id": "report-hybrid",
+      "question": "What kind of search does the report say Qdrant supports?",
+      "file": "report.pdf",
+      "keywords": [
+        "hybrid search"
+      ]
+    }
+  ],
+  "out_of_scope": [
+    {
+      "id": "oos-bread",
+      "question": "How do I bake sourdough bread?"
+    },
+    {
+      "id": "oos-capital",
+      "question": "What is the capital city of Australia?"
+    },
+    {
+      "id": "oos-football",
+      "question": "Who won the football World Cup in 2018?"
+    },
+    {
+      "id": "oos-sort",
+      "question": "How do I sort a list in Python in descending order?"
+    },
+    {
+      "id": "oos-kubernetes",
+      "question": "How do I configure an ingress controller in Kubernetes?"
+    },
+    {
+      "id": "oos-mortgage",
+      "question": "What is a good mortgage interest rate for a first-time buyer?"
+    },
+    {
+      "id": "oos-recipe",
+      "question": "Give me a recipe for vegetable biryani."
+    },
+    {
+      "id": "oos-flight",
+      "question": "What is the cheapest way to fly from Mumbai to London in December?"
+    },
+    {
+      "id": "oos-nobel",
+      "question": "Who won the Nobel Prize in Literature in 2020?"
+    },
+    {
+      "id": "oos-sql",
+      "question": "How do I write a SQL join between two tables?"
+    },
+    {
+      "id": "oos-marathon",
+      "question": "What is the world record time for the marathon?"
+    },
+    {
+      "id": "oos-photosynthesis",
+      "question": "How does photosynthesis work in plants?"
+    }
+  ]
+}

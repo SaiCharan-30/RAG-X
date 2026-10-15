@@ -67,3 +67,7 @@ data/processed/
 # ================================
 .ipynb_checkpoints/
 data/uploads/
+
+# Evaluation: keep latest.json (the Evaluation page reads it), ignore the rest
+evaluation/results/run-*.json
+evaluation/results/explain.txt
