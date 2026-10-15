@@ -20,6 +20,44 @@ services:
     volumes:
       - qdrant_data:/qdrant/storage
 
+  # The app services start only with:  docker compose --profile app up --build
+  api:
+    profiles: ["app"]
+    image: rag-x-app
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      # Inside Docker the databases are reached by service name, on their normal ports.
+      DATABASE_URL: postgresql+pg8000://rag_user:rag_password@postgres:5432/rag_x
+      QDRANT_URL: http://qdrant:6333
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./data:/app/data
+      - model_cache:/models
+    depends_on:
+      - postgres
+      - qdrant
+
+  ui:
+    profiles: ["app"]
+    image: rag-x-app
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    restart: unless-stopped
+    command: ["streamlit", "run", "frontend/app.py", "--server.address", "0.0.0.0", "--server.port", "8501"]
+    environment:
+      RAGX_BACKEND_URL: http://api:8001
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api
+
 volumes:
   postgres_data:
   qdrant_data:
+  model_cache:
