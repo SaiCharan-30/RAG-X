@@ -1,2 +1,0 @@
-RAG-X is an advanced multi-document AI knowledge assistant.
-It uses retrieval augmented generation to answer questions from documents.

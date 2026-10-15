@@ -1,7 +1,0 @@
-RAG-X deletion test document.
-
-This document exists only to verify that document deletion removes
-the original file, PostgreSQL metadata, PostgreSQL chunks, and
-Qdrant vectors.
-
-Unique deletion test phrase: RAG-X-DELETE-TEST-2026.
