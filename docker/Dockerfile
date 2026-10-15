@@ -11,7 +11,7 @@ RUN pip install --no-cache-dir uv
 WORKDIR /app
 
 # Dependencies first, so rebuilds are fast when only code changes.
-COPY pyproject.toml uv.lock README.md ./
+COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen --no-dev --no-install-project
 
 COPY . .
