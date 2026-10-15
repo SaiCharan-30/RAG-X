@@ -81,6 +81,14 @@ comparison = pd.DataFrame(
 
 st.bar_chart(comparison, stack=False)
 
+# NEW: explain why the two bars are equal.
+st.caption(
+    "The two bars are equal on purpose: results keep the order hybrid search "
+    "found them (it scored better than the reranker's order on these "
+    "documents). The reranker adds a relevance score, which decides whether "
+    "RAG-X answers or says it found nothing."
+)
+
 
 # ------------------------------------------------------------- threshold
 
@@ -146,6 +154,16 @@ if report.get("answers"):
     col2.metric("Cites the right file", percent(answers["cites_expected_file"]))
     col3.metric("Answer has key phrase", percent(answers["answer_has_keyword"]))
     col4.metric("Refuses unanswerable", percent(answers["refuses_out_of_scope"]))
+
+    # NEW: these numbers depend on which language model produced the answers.
+    st.caption(
+        "These numbers depend on the language model used for the run. With the "
+        "mock LLM (MOCK_LLM=true) every answer is the same placeholder, so "
+        "“Answer has key phrase” is 0% and the grounding score means little. "
+        "“Cites the right file” and “Refuses unanswerable” still reflect "
+        "retrieval. Re-run with real Gemini: "
+        "uv run python evaluation/run_eval.py --answers"
+    )
 
 
 # ------------------------------------------------------------- per question

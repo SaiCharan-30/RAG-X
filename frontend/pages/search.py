@@ -26,8 +26,9 @@ with st.sidebar:
     rerank = st.checkbox(
         "Rerank results",
         value=True,
-        help="Re-orders the best candidates with a more accurate model. "
-        "Slower, but usually more relevant.",
+        help="Scores each result with a more accurate model and shows its "
+        "relevance. Results keep the order hybrid search found them. "
+        "Slower than plain search.",
     )
 
 
@@ -71,10 +72,7 @@ if st.button("Search", type="primary"):
                 st.markdown(title)
 
                 if result["rerank_score"] is not None:
-                    st.caption(
-                        f"Relevance {result['rerank_score']:.0%} · "
-                        f"was #{result['retrieval_rank']} before reranking"
-                    )
+                    st.caption(f"Relevance {result['rerank_score']:.0%}")
                 else:
                     st.caption("Not reranked")
 
