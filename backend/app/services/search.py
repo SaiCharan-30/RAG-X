@@ -92,13 +92,18 @@ def rerank_keep_search_order(
     top_k: int = 5,
 ) -> list[dict]:
     """
-    Score every candidate with the reranker, but return the top_k passages
-    in the order hybrid search found them.
+    Return the first top_k candidates in the order hybrid search found them,
+    each with its reranker score ("rerank_score").
 
-    Why: on our evaluation questions the hybrid order found the right passage
-    more often than the reranker's order (Hit@1 72% vs 55%). The reranker is
-    still useful: every returned passage keeps its "rerank_score", which the
-    "is there an answer in the documents?" check relies on.
+    Why this order: on our evaluation questions the hybrid order found the
+    right passage more often than the reranker's order (Hit@1 72% vs 55%).
+    The reranker is still useful: its score drives the "is there an answer in
+    the documents?" check.
+
+    Speed: only the passages that are returned are sent to the reranker. It
+    runs on the CPU and costs about 0.3 seconds per passage, and a passage's
+    score does not depend on the other passages, so scoring the rest of the
+    candidates would change nothing.
 
     Every result also gets "retrieval_rank" (its position in hybrid search).
     """
@@ -108,15 +113,20 @@ def rerank_keep_search_order(
     for position, candidate in enumerate(candidates, start=1):
         candidate.setdefault("retrieval_rank", position)
 
+    shortlist = sorted(
+        candidates,
+        key=lambda result: result["retrieval_rank"],
+    )[:top_k]
+
     scored = reranker.rerank(
         query=query,
-        results=candidates,
-        top_k=len(candidates),
+        results=shortlist,
+        top_k=len(shortlist),
     )
 
     scored.sort(key=lambda result: result["retrieval_rank"])
 
-    return scored[:top_k]
+    return scored
 
 
 def hybrid_search_with_reranking(

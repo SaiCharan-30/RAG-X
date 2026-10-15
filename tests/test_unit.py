@@ -130,7 +130,18 @@ def test_search_documents_without_reranker(search_module, monkeypatch):
     assert all("rerank_score" not in r for r in results)
     assert [r["retrieval_rank"] for r in results] == [1, 2]
 
+def test_only_the_returned_passages_are_sent_to_the_reranker(search_module, monkeypatch):
+    seen = []
+    original = search_module.reranker.rerank
 
+    def recording_rerank(query, results, top_k=5):
+        seen.append(len(results))
+        return original(query, results, top_k)
+
+    monkeypatch.setattr(search_module.reranker, "rerank", recording_rerank)
+    results = search_module.rerank_keep_search_order("q", candidates(), top_k=2)
+    assert seen == [2]
+    assert [r["text"] for r in results] == ["a", "b"]
 # ------------------------------------------------------------- evaluation tool
 def load_run_eval():
     spec = importlib.util.spec_from_file_location(
